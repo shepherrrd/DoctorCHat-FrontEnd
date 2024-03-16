@@ -5,12 +5,14 @@ import LoginScreen from "./LoginScreen";
 import DoctorRegistration from "../components/DoctorRegistration";
 import SignUpScreen from "../components/UserRegistration";
 import ProfileScreen from "./UserProfile";
+import ChatListScreen from "./HomeScreen";
 
 export type RootStackParamList = {
   Login: undefined;
   UserRegister: undefined;
   DoctorRegister: undefined;
   ViewProfile: undefined;
+  Home: undefined;
 
   // Add parameters here if UserRegister takes any
 };
@@ -36,6 +38,11 @@ function AppNavigator() {
           name="ViewProfile"
           options={{ title: "Profile" }}
           component={ProfileScreen}
+        />
+        <Stack.Screen
+          name="Home"
+          options={{ title: "Home" }}
+          component={ChatListScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

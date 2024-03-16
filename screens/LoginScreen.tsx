@@ -33,7 +33,7 @@ const LoginScreen: React.FC = () => {
   const handleLogin = () => {
     // Perform login logic
     console.log("Login data:", formData);
-    navigation.navigate("ViewProfile");
+    navigation.navigate("Home");
   };
 
   const navigateToRegister = () => {

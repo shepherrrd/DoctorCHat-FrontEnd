@@ -1,87 +1,119 @@
-// HomeScreen.js
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  SafeAreaView,
+  Image,
 } from "react-native";
-import ChatScreen from "./ChatScreen";
 
-const chats = [
+// Define the type for each chat item
+type ChatItem = {
+  id: string;
+  name: string;
+  lastMessage: string;
+  avatar: string;
+};
+
+// Mock chat data
+const chats: ChatItem[] = [
   {
     id: "1",
-    name: "Olivia Smith",
-    message: "I'm actually taking the CalTrain",
+    name: "Chat with AI",
+    lastMessage: "I'm actually taking the CalTrain",
+    avatar: "https://via.placeholder.com/50",
   },
-  // ... other chat entries
+  {
+    id: "2",
+    name: "Doctor 1",
+    lastMessage: "Can you believe they didn't check my ticket?",
+    avatar: "https://via.placeholder.com/50",
+  },
+  {
+    id: "3",
+    name: "Doctor 2",
+    lastMessage: "Let's stay in touch, would love to revisit this convo",
+    avatar: "https://via.placeholder.com/50",
+  },
 ];
 
-const HomeScreen = ({ navigation }) => {
-  const [activeTab, setActiveTab] = useState("Home");
+// Chat list item component
+const ChatListItem = ({
+  name,
+  lastMessage,
+  avatar,
+  onPress,
+}: ChatItem & { onPress: () => void }) => {
+  return (
+    <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
+      <Image
+        source={{ uri: avatar }} // Placeholder image
+        style={styles.avatar}
+      />
+      <View style={styles.textContainer}>
+        <Text style={styles.itemTitle}>{name}</Text>
+        <Text style={styles.itemSubtitle}>{lastMessage}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
-  const handleSelectChat = (name) => {
-    // Navigate to the Chat screen with the chat name
-    return <ChatScreen route={{ id: name }} />;
-  };
+// Chat list screen component
+const ChatListScreen = ({ navigation }) => {
+  const renderItem = ({ item }: { item: ChatItem }) => (
+    <ChatListItem
+      id={item.id}
+      avatar={item.avatar}
+      name={item.name}
+      lastMessage={item.lastMessage}
+      onPress={() => navigation.navigate("Chat", { id: item.id })}
+    />
+  );
 
   return (
-    <View style={styles.container}>
-      {/* Chat list */}
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={chats}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleSelectChat(item.id)}>
-            <Text>{item.name}</Text>
-            <Text>{item.message}</Text>
-          </TouchableOpacity>
-        )}
+        renderItem={renderItem}
       />
-
-      {/* Bottom Tab Bar */}
-      {/* <View style={styles.tabBar}>
-        <TouchableOpacity onPress={() => setActiveTab("Home")}>
-          <Text
-            style={[styles.tabItem, activeTab === "Home" && styles.activeTab]}
-          >
-            Home
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <Text
-            style={[
-              styles.tabItem,
-              activeTab === "Profile" && styles.activeTab,
-            ]}
-          >
-            Profile
-          </Text>
-        </TouchableOpacity>
-      </View> */}
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
-  tabBar: {
+  itemContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 20,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderColor: "#ddd",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    alignItems: "center",
   },
-  tabItem: {
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  itemTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  itemSubtitle: {
     fontSize: 16,
+    color: "grey",
   },
-  activeTab: {
-    color: "blue",
-  },
+  // ... add more styles if needed
 });
 
-export default HomeScreen;
+export default ChatListScreen;
